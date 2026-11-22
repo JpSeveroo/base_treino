@@ -11,6 +11,7 @@ class UI:
             print("MENU DE TAREFAS:")
             print("(1) Cadastrar Tarefa")
             print("(3) Listar uma tarefa")
+            print("(4) Atualizar tarefa")
             print("(0) Sair")
             
             opcao = input("Escolhe uma aí: ")
@@ -19,12 +20,29 @@ class UI:
                 self.cadastrar_task()
             elif (opcao == "3"):
                 self.read_one_task()
+            elif:
+                self.update
             elif opcao == "0":
                 print("Encerrando o sistema...")
                 break
             else:
                 print("Opção inválida! Tente novamente.")
-                
+
+    def update_task(self):
+        try:
+            task_id = int(input("Identificador da tarefa: "))
+        except ValueError:
+            print("Informe um identificador inteiro.")
+            return
+
+        title = input("Novo título: ")
+        description = input("Nova descrição (opcional): ")
+
+        try:
+            self.services.update(task_id, title, description)
+        except ValueError as error:
+            print(f"Error: {error}")
+            return
                 
     def cadastrar_task(self):
         print("\n--- Nova Tarefa ---")
