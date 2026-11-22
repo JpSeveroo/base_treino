@@ -33,4 +33,6 @@ class Services:
         pass
 
     def delete(self, task_id):
-        pass
+        delete = self.repository.delete(task_id)
+        if not delete:
+            raise ValueError(f"Task com id {task_id} não existe")
