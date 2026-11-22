@@ -36,7 +36,7 @@ class Services:
             )
 
         task = self.get(task_id)
-        task.title = title
+        task.title = title.strip()
         task.description = description.strip() if description else ""
 
         if not self.repository.update(task):
