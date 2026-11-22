@@ -20,8 +20,8 @@ class UI:
                 self.cadastrar_task()
             elif (opcao == "3"):
                 self.read_one_task()
-            elif:
-                self.update
+            elif (opcao == "4"):
+                self.update_task()
             elif opcao == "0":
                 print("Encerrando o sistema...")
                 break
