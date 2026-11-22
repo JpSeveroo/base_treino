@@ -29,9 +29,19 @@ class Services:
             raise ValueError(f"Task com id {task_id} não existe")
         return task
         
-    def update(self, task_id, title, description):
-        pass
+    def update(self, task_id: int, title: str, description: str = "") -> None:
+        if not title or not title.strip():
+            raise ValueError(
+                "O título da tarefa é obrigatório e não pode conter apenas espaços."
+            )
 
+        task = self.get(task_id)
+        task.title = title.strip()
+        task.description = description.strip() if description else ""
+
+        if not self.repository.update(task):
+            raise ValueError(f"Task com id {task_id} não existe")
+    
     def delete(self, task_id):
         delete = self.repository.delete(task_id)
         if not delete:
