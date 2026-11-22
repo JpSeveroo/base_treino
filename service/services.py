@@ -21,9 +21,14 @@ class Services:
     def list(self):
         pass
 
-    def get(self, task_id):
-        pass
-
+    def get(self, task_id: int) -> Task:
+        if not task_id.isinstance(int):
+            raise raise ValueError(f"Digite um número.")
+        task = self.repository.find_by_id(task_id)
+        if not task:
+            raise ValueError(f"Task com id {task_id} não existe")
+        return task
+        
     def update(self, task_id, title, description):
         pass
 
