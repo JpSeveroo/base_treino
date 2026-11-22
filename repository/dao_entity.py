@@ -35,8 +35,17 @@ class DAOEntity:
             return task
 
     def update(self, task):
-        # Atualizar
-        pass
+        with closing(get_connection()) as conn:
+            cursor = conn.execute(
+                """
+                UPDATE tasks
+                SET title = ?, description = ?
+                WHERE id = ?
+                """,
+                (task.title, task.description, task.id)
+            )
+            conn.commit()
+            return cursor.rowcount == 1
 
     def delete(self, task_id):
         # Excluir
