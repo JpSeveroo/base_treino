@@ -38,6 +38,10 @@ class DAOEntity:
         # Atualizar
         pass
 
-    def delete(self, task_id):
-        # Excluir
-        pass
+    def delete(self, task_id: int) -> int:
+        with closing(get_connection()) as conn:
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM tasks WHERE id=?", (task_id,))
+            conn.commit()
+            return cursor.rowcount
+            
