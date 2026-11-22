@@ -40,6 +40,7 @@ class UI:
 
         try:
             self.services.update(task_id, title, description)
+            print("Tarefa atualizada com sucesso!")
         except ValueError as error:
             print(f"Error: {error}")
             return
