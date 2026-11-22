@@ -1,25 +1,27 @@
 from entities.entity import Task
+from repository.dao_entity import DAOEntity
+
 
 class Services:
 
-  def __init__(self, repository):
-    self.repository = repository
+    def __init__(self, repository):
+        self.repository = repository
 
-  def create(self, title: str, description: str = "") -> Task:
-    if not title or not title.strip():
-      raise ValueError(
-          "O título da tarefa é obrigatório e não pode conter apenas espaços."
-      )
+    def create(self, title: str, description: str = "") -> Task:
+        if not title or not title.strip():
+            raise ValueError(
+                "O título da tarefa é obrigatório e não pode conter apenas espaços."
+            )
 
-    clean_title = title.strip()
-    clean_description = description.strip() if description else ""
+        clean_title = title.strip()
+        clean_description = description.strip() if description else ""
 
-    new_task = Task(title=clean_title, description=clean_description)
+        new_task = Task(title=clean_title, description=clean_description)
 
-    return self.repository.create(new_task)
+        return self.repository.create(new_task)
 
     def list(self):
-        pass
+        return self.repository.find_all()
 
     def get(self, task_id):
         pass
