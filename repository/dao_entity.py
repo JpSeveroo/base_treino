@@ -53,4 +53,16 @@ class DAOEntity:
             cursor.execute("DELETE FROM tasks WHERE id=?", (task_id,))
             conn.commit()
             return cursor.rowcount
-            
+
+    def set_completed(self, task_id: int, completed: bool) -> bool:
+        with closing(get_connection()) as conn:
+            cursor = conn.execute(
+                    """
+                    UPDATE tasks
+                    SET completed = ?
+                    WHERE id = ? AND completed = ?
+                    """,
+                    (int(completed), task_id, 1 - int(completed))
+                )
+            conn.commit()
+            return cursor.rowcount == 1
