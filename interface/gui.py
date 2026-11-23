@@ -1,5 +1,5 @@
 from service.services import Services
-
+import time
 
 class UI:
 
@@ -10,9 +10,12 @@ class UI:
         while True:
             print("MENU DE TAREFAS:")
             print("(1) Cadastrar Tarefa")
-            print("(2) Listar uma tarefa")
-            print("(3) Excluir uma tarefa")
+            print("(2) Listar Tarefas")
+            print("(3) Listar uma tarefa")
             print("(4) Atualizar tarefa")
+            print("(5) Excluir uma tarefa")
+            print("(6) Marcar tarefa como concluída")
+            print("(7) Marcar tarefa como pendente")
             print("(0) Sair")
             
             opcao = input("Escolhe uma aí: ")
@@ -20,16 +23,51 @@ class UI:
             if (opcao == "1"):
                 self.cadastrar_task()
             elif (opcao == "2"):
-                self.read_one_task()
+                tasks = self.services.list()
+                if not tasks:
+                    print("Nao existe nenhuma task cadastrada")
+                    
+                else:
+                    for task in tasks:
+                        status = "Concluída" if task.completed == 1 else "Pendente"
+                        print(
+                            f"Task:{task.title} | descricao:{task.description} | "
+                            f"ID:{task.id} | Situação: {status}"
+                        )
             elif (opcao == "3"):
-                self.delete_task()
+                self.read_one_task()
             elif (opcao == "4"):
                 self.update_task()
+            elif (opcao == "5"):
+                self.delete_task()
+            elif (opcao == "6"):
+                self._change_task_status(self.services.complete, "concluída")
+            elif (opcao == "7"):
+                self._change_task_status(self.services.reopen, "pendente")
             elif opcao == "0":
+                time.sleep(1)
                 print("Encerrando o sistema...")
                 break
             else:
                 print("Opção inválida! Tente novamente.")
+
+    def _change_task_status(self, operation, status):
+        try:
+            task_id = int(input("Identificador da tarefa: "))
+        except ValueError:
+            print("Informe um identificador inteiro.")
+            return
+
+        try:
+            changed = operation(task_id)
+        except ValueError as error:
+            print(f"Erro: {error}")
+            return
+
+        if changed:
+            print(f"Situação atualizada para {status}.")
+        else:
+            print(f"A tarefa já está {status}")
 
     def update_task(self):
         try:

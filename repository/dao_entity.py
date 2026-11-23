@@ -8,19 +8,32 @@ class DAOEntity:
     def create(self, task: Task) -> Task:
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO tasks (title, description) VALUES (?, ?)",
-            (task.title, task.description),
-        )
+        sql = "INSERT INTO tasks (title, description) VALUES (?, ?)"
+        valores = (task.title, task.description)
+        cursor.execute(sql, valores)
         conn.commit()
-
         task.id = cursor.lastrowid
         conn.close()
         return task
 
     def find_all(self):
-        # Consultar todas as entidades
-        pass
+        conn = get_connection()
+        cursor = conn.cursor()
+        sql = "SELECT * FROM tasks"
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        tasks = []
+        for row in rows:
+            task = Task(
+                id=row[0],
+                title=row[1],
+                description=row[2],
+                completed=row[3],
+            )
+            tasks.append(task)
+                
+        conn.close()
+        return tasks
 
     def find_by_id(self, task_id: int) -> Task | None:
         with closing(get_connection()) as conn:
@@ -54,3 +67,16 @@ class DAOEntity:
             conn.commit()
             return cursor.rowcount
             
+
+    def set_completed(self, task_id: int, completed: bool) -> bool:
+        with closing(get_connection()) as conn:
+            cursor = conn.execute(
+                    """
+                    UPDATE tasks
+                    SET completed = ?
+                    WHERE id = ? AND completed = ?
+                    """,
+                    (int(completed), task_id, 1 - int(completed))
+                )
+            conn.commit()
+            return cursor.rowcount == 1

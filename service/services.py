@@ -1,4 +1,6 @@
 from entities.entity import Task
+from repository.dao_entity import DAOEntity
+
 
 class Services:
 
@@ -19,7 +21,7 @@ class Services:
         return self.repository.create(new_task)
 
     def list(self):
-        pass
+        return self.repository.find_all()
 
     def get(self, task_id: int) -> Task:
         if not isinstance(task_id, int):
@@ -46,3 +48,17 @@ class Services:
         delete = self.repository.delete(task_id)
         if not delete:
             raise ValueError(f"Task com id {task_id} não existe")
+
+    def complete(self, task_id: int) -> bool:
+        return self._change_status(task_id, completed=True)
+    
+    def reopen(self, task_id: int) -> bool:
+        return self._change_status(task_id, completed=False)
+
+    def _change_status(self, task_id: int, completed: bool):
+        self.get(task_id)
+        if self.repository.set_completed(task_id, completed):
+            return True
+
+        self.get(task_id)
+        return False
