@@ -12,10 +12,8 @@ class UI:
             print("(1) Cadastrar Tarefa")
             print("(2) Listar Tarefas")
             print("(3) Listar uma tarefa")
-            print("(4) Excluir uma tarefa")
-            print("(2) Listar uma tarefa")
-            print("(3) Excluir uma tarefa")
             print("(4) Atualizar tarefa")
+            print("(5) Excluir uma tarefa")
             print("(6) Marcar tarefa como concluída")
             print("(7) Marcar tarefa como pendente")
             print("(0) Sair")
@@ -31,17 +29,21 @@ class UI:
                     
                 else:
                     for task in tasks:
-                        print(f"Task:{task.title} | descricao:{task.description} | ID:{task.id}")
+                        status = "Concluída" if task.completed == 1 else "Pendente"
+                        print(
+                            f"Task:{task.title} | descricao:{task.description} | "
+                            f"ID:{task.id} | Situação: {status}"
+                        )
             elif (opcao == "3"):
                 self.read_one_task()
-            elif (opcao == "3"):
-                self.delete_task()
             elif (opcao == "4"):
                 self.update_task()
+            elif (opcao == "5"):
+                self.delete_task()
             elif (opcao == "6"):
-                self._change_task_status(self.services.completed, "concluída")
+                self._change_task_status(self.services.complete, "concluída")
             elif (opcao == "7"):
-                self._change_task_status(self.services.completed, "pendente")
+                self._change_task_status(self.services.reopen, "pendente")
             elif opcao == "0":
                 time.sleep(1)
                 print("Encerrando o sistema...")
@@ -51,9 +53,10 @@ class UI:
 
     def _change_task_status(self, operation, status):
         try:
-            task_id = int(input("Indentificador da tarefa: "))
+            task_id = int(input("Identificador da tarefa: "))
         except ValueError:
             print("Informe um identificador inteiro.")
+            return
 
         try:
             changed = operation(task_id)
