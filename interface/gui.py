@@ -25,11 +25,30 @@ class UI:
                 self.delete_task()
             elif (opcao == "4"):
                 self.update_task()
+            elif (opcao == "5"):
+                self.
             elif opcao == "0":
                 print("Encerrando o sistema...")
                 break
             else:
                 print("Opção inválida! Tente novamente.")
+
+    def _change_task_status(self, operation, status):
+        try:
+            task_id = int(input("Indentificador da tarefa: "))
+        except ValueError:
+            print("Informe um identificador inteiro.")
+
+        try:
+            changed = operation(task_id)
+        except ValueError as error:
+            print(f"Erro: {error}")
+            return
+
+        if changed:
+            print(f"Situação atualizada para {status}.")
+        else:
+            print(f"A tarefa já está {status}")
 
     def update_task(self):
         try:
