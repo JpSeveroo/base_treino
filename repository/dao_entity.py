@@ -44,6 +44,19 @@ class DAOEntity:
             task = Task(task_info[1], task_info[2], task_info[0], task_info[3])
             return task
 
+    def update(self, task):
+        with closing(get_connection()) as conn:
+            cursor = conn.execute(
+                """
+                UPDATE tasks
+                SET title = ?, description = ?
+                WHERE id = ?
+                """,
+                (task.title, task.description, task.id)
+            )
+            conn.commit()
+            return cursor.rowcount == 1
+
     def delete(self, task_id: int) -> int:
         with closing(get_connection()) as conn:
             cursor = conn.cursor()
@@ -51,3 +64,16 @@ class DAOEntity:
             conn.commit()
             return cursor.rowcount
             
+
+    def set_completed(self, task_id: int, completed: bool) -> bool:
+        with closing(get_connection()) as conn:
+            cursor = conn.execute(
+                    """
+                    UPDATE tasks
+                    SET completed = ?
+                    WHERE id = ? AND completed = ?
+                    """,
+                    (int(completed), task_id, 1 - int(completed))
+                )
+            conn.commit()
+            return cursor.rowcount == 1

@@ -13,6 +13,11 @@ class UI:
             print("(2) Listar Tarefas")
             print("(3) Listar uma tarefa")
             print("(4) Excluir uma tarefa")
+            print("(2) Listar uma tarefa")
+            print("(3) Excluir uma tarefa")
+            print("(4) Atualizar tarefa")
+            print("(6) Marcar tarefa como concluída")
+            print("(7) Marcar tarefa como pendente")
             print("(0) Sair")
             
             opcao = input("Escolhe uma aí: ")
@@ -29,15 +34,54 @@ class UI:
                         print(f"Task:{task.title} | descricao:{task.description} | ID:{task.id}")
             elif (opcao == "3"):
                 self.read_one_task()
-            elif (opcao == "4"):
+            elif (opcao == "3"):
                 self.delete_task()
+            elif (opcao == "4"):
+                self.update_task()
+            elif (opcao == "6"):
+                self._change_task_status(self.services.completed, "concluída")
+            elif (opcao == "7"):
+                self._change_task_status(self.services.completed, "pendente")
             elif opcao == "0":
                 time.sleep(1)
                 print("Encerrando o sistema...")
                 break
             else:
                 print("Opção inválida! Tente novamente.")
-                
+
+    def _change_task_status(self, operation, status):
+        try:
+            task_id = int(input("Indentificador da tarefa: "))
+        except ValueError:
+            print("Informe um identificador inteiro.")
+
+        try:
+            changed = operation(task_id)
+        except ValueError as error:
+            print(f"Erro: {error}")
+            return
+
+        if changed:
+            print(f"Situação atualizada para {status}.")
+        else:
+            print(f"A tarefa já está {status}")
+
+    def update_task(self):
+        try:
+            task_id = int(input("Identificador da tarefa: "))
+        except ValueError:
+            print("Informe um identificador inteiro.")
+            return
+
+        title = input("Novo título: ")
+        description = input("Nova descrição (opcional): ")
+
+        try:
+            self.services.update(task_id, title, description)
+            print("Tarefa atualizada com sucesso!")
+        except ValueError as error:
+            print(f"Error: {error}")
+            return
                 
     def cadastrar_task(self):
         print("\n--- Nova Tarefa ---")
