@@ -25,7 +25,10 @@ class DAOEntity:
         tasks = []
         for row in rows:
             task = Task(
-                id=row["id"], title=row["title"], description=row["description"]
+                id=row[0],
+                title=row[1],
+                description=row[2],
+                completed=row[3],
             )
             tasks.append(task)
                 
