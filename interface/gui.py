@@ -1,5 +1,5 @@
 from service.services import Services
-
+import time
 
 class UI:
 
@@ -10,6 +10,7 @@ class UI:
         while True:
             print("MENU DE TAREFAS:")
             print("(1) Cadastrar Tarefa")
+            print("(2) Listar Tarefas")
             print("(3) Listar uma tarefa")
             print("(4) Excluir uma tarefa")
             print("(0) Sair")
@@ -18,11 +19,20 @@ class UI:
             
             if (opcao == "1"):
                 self.cadastrar_task()
+            elif (opcao == "2"):
+                tasks = self.services.list()
+                if not tasks:
+                    print("Nao existe nenhuma task cadastrada")
+                    
+                else:
+                    for task in tasks:
+                        print(f"Task:{task.title} | descricao:{task.description} | ID:{task.id}")
             elif (opcao == "3"):
                 self.read_one_task()
             elif (opcao == "4"):
                 self.delete_task()
             elif opcao == "0":
+                time.sleep(1)
                 print("Encerrando o sistema...")
                 break
             else:

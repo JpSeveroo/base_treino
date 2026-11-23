@@ -1,4 +1,6 @@
 from entities.entity import Task
+from repository.dao_entity import DAOEntity
+
 
 class Services:
 
@@ -19,7 +21,7 @@ class Services:
         return self.repository.create(new_task)
 
     def list(self):
-        pass
+        return self.repository.find_all()
 
     def get(self, task_id: int) -> Task:
         if not isinstance(task_id, int):
