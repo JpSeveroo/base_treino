@@ -13,6 +13,8 @@ class UI:
             print("(2) Listar uma tarefa")
             print("(3) Excluir uma tarefa")
             print("(4) Atualizar tarefa")
+            print("(6) Marcar tarefa como concluída")
+            print("(7) Marcar tarefa como pendente")
             print("(0) Sair")
             
             opcao = input("Escolhe uma aí: ")
@@ -25,8 +27,10 @@ class UI:
                 self.delete_task()
             elif (opcao == "4"):
                 self.update_task()
-            elif (opcao == "5"):
-                self.
+            elif (opcao == "6"):
+                self._change_task_status(self.services.completed, "concluída")
+            elif (opcao == "7"):
+                self._change_task_status(self.services.completed, "pendente")
             elif opcao == "0":
                 print("Encerrando o sistema...")
                 break
